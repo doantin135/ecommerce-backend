@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($products as $product)
+                    @forelse ($products as $product)
                         <tr>
                             <td>
                                 <img src="{{ $product->image }}" width="50" height="50"
@@ -43,17 +43,24 @@
                                     {{ $product->category?->label ?? 'N/A' }}
                                 </span>
                             </td>
-                            <td class="text-danger fw-bold">{{ $product->price }}</td>
+                            <td class="text-danger fw-bold">{{ number_format($product->price) }}₫</td>
                             <td>
-                                @if ($product->badge === 'HOT')
-                                    <span class="badge bg-danger">HOT</span>
-                                @elseif($product->badge === 'SALE')
-                                    <span class="badge bg-warning text-dark">SALE</span>
-                                @else
-                                    <span class="text-muted">—</span>
-                                @endif
+                                @switch($product->badge)
+                                    @case('HOT')
+                                        <span class="badge bg-danger">HOT</span>
+                                    @break
+
+                                    @case('SALE')
+                                        <span class="badge bg-warning text-dark">SALE</span>
+                                    @break
+
+                                    @default
+                                        <span class="text-muted">—</span>
+                                @endswitch
                             </td>
-                            <td>⭐ {{ $product->rating }}</td>
+                            <td>
+                                <i class="bi bi-star-fill text-warning"></i> {{ $product->rating }}
+                            </td>
                             <td>{{ $product->sold }}</td>
                             <td>
                                 <a href="/admin/products/{{ $product->id }}/edit" class="btn btn-sm btn-outline-primary">
@@ -69,9 +76,16 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    Chưa có sản phẩm nào
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-@endsection
+
+    @endsection

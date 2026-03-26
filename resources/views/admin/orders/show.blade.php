@@ -10,11 +10,10 @@
     @endif
 
     <div class="row g-4">
-        {{-- Danh sách sản phẩm --}}
         <div class="col-md-8">
             <div class="card border-0 shadow-sm" style="border-radius:16px;">
                 <div class="card-body">
-                    <h6 class="fw-bold mb-3">🛍 Sản phẩm trong đơn</h6>
+                    <h6 class="fw-bold mb-3"><i class="bi bi-bag"></i> Sản phẩm trong đơn</h6>
                     <table class="table align-middle">
                         <thead class="table-light">
                             <tr>
@@ -46,9 +45,7 @@
                         <tfoot>
                             <tr>
                                 <td colspan="4" class="text-end fw-bold">Tổng cộng:</td>
-                                <td class="text-danger fw-bold fs-5">
-                                    {{ number_format($order->total) }}₫
-                                </td>
+                                <td class="text-danger fw-bold fs-5">{{ number_format($order->total) }}₫</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -57,53 +54,47 @@
         </div>
 
         <div class="col-md-4">
-            {{-- Thông tin khách hàng --}}
             <div class="card border-0 shadow-sm mb-3" style="border-radius:16px;">
                 <div class="card-body">
-                    <h6 class="fw-bold mb-3">👤 Thông tin khách hàng</h6>
+                    <h6 class="fw-bold mb-3"><i class="bi bi-person-circle"></i> Thông tin khách hàng</h6>
+                    <p class="mb-2"><i class="bi bi-person"></i> <strong>Tên:</strong> {{ $order->user_name }}</p>
+                    <p class="mb-2"><i class="bi bi-telephone"></i> <strong>SĐT:</strong> {{ $order->phone }}</p>
+                    <p class="mb-2"><i class="bi bi-geo-alt"></i> <strong>Địa chỉ:</strong> {{ $order->address }}</p>
                     <p class="mb-2">
-                        <i class="bi bi-person"></i>
-                        <strong> Tên:</strong> {{ $order->user_name }}
-                    </p>
-                    <p class="mb-2">
-                        <i class="bi bi-telephone"></i>
-                        <strong> SĐT:</strong> {{ $order->phone }}
-                    </p>
-                    <p class="mb-2">
-                        <i class="bi bi-geo-alt"></i>
-                        <strong> Địa chỉ:</strong> {{ $order->address }}
-                    </p>
-                    <p class="mb-2">
-                        <i class="bi bi-credit-card"></i>
-                        <strong> Thanh toán:</strong>
-                        {{ $order->payment_method === 'cod' ? '🚚 COD' : '🏦 Banking' }}
+                        <i class="bi bi-credit-card"></i> <strong>Thanh toán:</strong>
+                        @if ($order->payment_method === 'cod')
+                            <i class="bi bi-truck"></i> COD
+                        @else
+                            <i class="bi bi-bank"></i> Banking
+                        @endif
                     </p>
                     @if ($order->note)
-                        <p class="mb-0">
-                            <i class="bi bi-chat-text"></i>
-                            <strong> Ghi chú:</strong> {{ $order->note }}
-                        </p>
+                        <p class="mb-0"><i class="bi bi-chat-text"></i> <strong>Ghi chú:</strong> {{ $order->note }}</p>
                     @endif
                 </div>
             </div>
 
-            {{-- Cập nhật trạng thái --}}
             <div class="card border-0 shadow-sm" style="border-radius:16px;">
                 <div class="card-body">
-                    <h6 class="fw-bold mb-3">📦 Cập nhật trạng thái</h6>
+                    <h6 class="fw-bold mb-3"><i class="bi bi-box-seam"></i> Cập nhật trạng thái</h6>
                     <form action="/admin/orders/{{ $order->id }}/status" method="POST">
                         @csrf
                         @method('PUT')
                         <select name="status" class="form-select mb-3">
-                            <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>⏳ Chờ xác nhận
+                            <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>
+                                <i class="bi bi-hourglass-split"></i> Chờ xác nhận
                             </option>
-                            <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>⚙️ Đang xử
-                                lý</option>
-                            <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>🚚 Đang giao
+                            <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>
+                                <i class="bi bi-gear"></i> Đang xử lý
                             </option>
-                            <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>✅ Đã giao
+                            <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>
+                                <i class="bi bi-truck"></i> Đang giao
                             </option>
-                            <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>❌ Đã hủy
+                            <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>
+                                <i class="bi bi-check2-circle"></i> Đã giao
+                            </option>
+                            <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>
+                                <i class="bi bi-x-circle"></i> Đã hủy
                             </option>
                         </select>
                         <button type="submit" class="btn btn-primary w-100">
@@ -116,8 +107,7 @@
     </div>
 
     <div class="mt-3">
-        <a href="/admin/orders" class="btn btn-outline-secondary">
-            ← Quay lại danh sách
-        </a>
+        <a href="/admin/orders" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Quay lại danh sách</a>
     </div>
+
 @endsection
